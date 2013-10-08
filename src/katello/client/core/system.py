@@ -289,7 +289,11 @@ class TasksList(SystemAction):
         tasks = self.api.tasks(org_name, environment["id"], sys_name, sys_uuid)
 
         for t in tasks:
-            t['result'] = "\n" + t['result_description']
+            if isinstance(t['result_description'], list):
+                for entry in t['result_description']:
+                    t['result'] = "\n" + entry
+            else:
+                t['result'] = "\n" + t['result_description']
 
         self.printer.add_column('uuid', _("Task ID"))
         self.printer.add_column('system_name', _("System"))
